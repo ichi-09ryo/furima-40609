@@ -39,7 +39,6 @@ Things you may want to cover:
 ## Association
 - has_many:items
 - has_many:orders
-- has_many:comments
 
 ## itemsテーブル
 |Column|Type|Options|
@@ -58,13 +57,12 @@ Things you may want to cover:
 ## Association
 - belongs_to:user
 - has_one:order
-- has_many:comments
 
 ## ordersテーブル
 |Column|Type|Options|
 |------|----|-------|
-| user_id | references | null:false,foreign_key: true |
-| item_id | references | null:false,foreign_key: true |
+| user | references | null:false,foreign_key: true |
+| item | references | null:false,foreign_key: true |
 
 ## Association
 - belongs_to:user
