@@ -6,7 +6,6 @@ class User < ApplicationRecord
   #has_many :orders
 
   validates :nickname, presence: true, uniqueness: true
-  validates :email, presence: true, uniqueness: true, format: { with: /\A[^@\s]+@[^@\s]+\z/ }
   validates :password, presence: true, length: { minimum: 6, maximum: 255 },
                        format: { with: /\A(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)\z/ }
   validates :password_confirmation, presence: true
