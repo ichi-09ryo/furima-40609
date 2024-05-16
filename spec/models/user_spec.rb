@@ -60,27 +60,27 @@ RSpec.describe User, type: :model do
         @user.password = '1234'
         @user.password_confirmation = '1234'
         @user.valid?
-        expect(@user.errors.full_messages).to include("Password is too short (minimum is 6 characters)")
+        expect(@user.errors.full_messages).to include('Password is too short (minimum is 6 characters)')
       end
       it '名字が全角(漢字、ひらがな、カタカナ)でないと登録できない' do
         @user.last_name = 'ichioka'
         @user.valid?
-        expect(@user.errors.full_messages).to include("Last name is invalid")
+        expect(@user.errors.full_messages).to include('Last name is invalid')
       end
       it '名前が全角(漢字、ひらがな、カタカナ)でないと登録できない' do
         @user.first_name = 'ryosuke'
         @user.valid?
-        expect(@user.errors.full_messages).to include("First name is invalid")
+        expect(@user.errors.full_messages).to include('First name is invalid')
       end
       it '名字のふりがなが全角(カタカナ)でないと登録できない' do
         @user.last_name_kana = 'いちおか'
         @user.valid?
-        expect(@user.errors.full_messages).to include("Last name kana is invalid")
+        expect(@user.errors.full_messages).to include('Last name kana is invalid')
       end
       it '名前のふりがなが全角(カタカナ)でないと登録できない' do
         @user.first_name_kana = 'りょうすけ'
         @user.valid?
-        expect(@user.errors.full_messages).to include("First name kana is invalid")
+        expect(@user.errors.full_messages).to include('First name kana is invalid')
       end
       it '生年月日が空欄だと保存できない' do
         @user.birthday = ''
