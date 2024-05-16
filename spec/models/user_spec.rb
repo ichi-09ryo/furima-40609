@@ -51,6 +51,11 @@ RSpec.describe User, type: :model do
         another_user.valid?
         expect(another_user.errors.full_messages).to include('Email has already been taken')
       end
+      it 'メールアドレスに@を含まない場合は登録できない' do
+        user = FactoryBot.build(:user, email: 'testexample.com')
+        user.valid?
+        expect(user.errors[:email]).to include('is invalid')
+      end
       it 'パスワードが空欄だと保存できない' do
         @user.password = ''
         @user.valid?
@@ -61,6 +66,26 @@ RSpec.describe User, type: :model do
         @user.password_confirmation = '1234'
         @user.valid?
         expect(@user.errors.full_messages).to include('Password is too short (minimum is 6 characters)')
+      end
+      it '英字のみのパスワードでは登録できない' do
+        user = FactoryBot.build(:user, password: 'password')
+        user.valid?
+        expect(user.errors[:password]).to include('is invalid')
+      end
+      it '数字のみのパスワードは登録できない' do
+        user = FactoryBot.build(:user, password: '123456')
+        user.valid?
+        expect(user.errors[:password]).to include('is invalid')
+      end
+      it '全角文字を含むパスワードは登録できない' do
+        user = FactoryBot.build(:user, password: 'パスワード123')
+        user.valid?
+        expect(user.errors[:password]).to include('is invalid')
+      end
+      it 'パスワードとパスワード(確認用)が不一致だと登録できない' do
+        user = FactoryBot.build(:user, password_confirmation: 'password')
+        user.valid?
+        expect(user.errors[:password_confirmation]).to include("doesn't match Password")
       end
       it '名字が全角(漢字、ひらがな、カタカナ)でないと登録できない' do
         @user.last_name = 'ichioka'
@@ -81,6 +106,26 @@ RSpec.describe User, type: :model do
         @user.first_name_kana = 'りょうすけ'
         @user.valid?
         expect(@user.errors.full_messages).to include('First name kana is invalid')
+      end
+      it '姓(全角)が空だと登録できない' do
+        user = FactoryBot.build(:user, last_name: nil)
+        user.valid?
+        expect(user.errors[:last_name]).to include("can't be blank")
+      end
+      it '名(全角)が空だと登録できない' do
+        user = FactoryBot.build(:user, first_name: nil)
+        user.valid?
+        expect(user.errors[:first_name]).to include("can't be blank")
+      end
+      it '姓(カナ)が空だと登録できない' do
+        user = FactoryBot.build(:user, last_name_kana: nil)
+        user.valid?
+        expect(user.errors[:last_name_kana]).to include("can't be blank")
+      end
+      it '名(カナ)が空だと登録できない' do
+        user = FactoryBot.build(:user, first_name_kana: nil)
+        user.valid?
+        expect(user.errors[:first_name_kana]).to include("can't be blank")
       end
       it '生年月日が空欄だと保存できない' do
         @user.birthday = ''
