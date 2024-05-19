@@ -15,18 +15,16 @@ class Item < ApplicationRecord
     validates :name
     validates :description
     validates :price
+    validates :image
+  end
+
+  with_options numericality: { other_than: 1, message: "can't be blank" } do
     validates :category_id
+    validates :prefecture_id
     validates :item_status_id
     validates :shipping_cost_id
-    validates :prefecture_id
     validates :shipping_date_id
   end
 
-  with_options numericality: { other_than: 0 } do
-    validates :category_id
-    validates :delivery_area_id
-    validates :item_status_id
-    validates :shipping_cost_id
-    validates :shipping_date_id
-  end
+  validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999 }
 end
