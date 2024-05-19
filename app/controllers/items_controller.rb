@@ -15,9 +15,9 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
     @item.user = current_user
     if @item.save
-      redirect_to root_path
+      redirect_to root_path, notice: 'Item was successfully created.'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
