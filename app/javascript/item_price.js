@@ -1,5 +1,8 @@
-// app/javascript/item_price.js
-window.addEventListener('load', () => {
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function setupPriceCalculation() {
   const priceInput = document.getElementById("item-price");
   if (priceInput) {
     priceInput.addEventListener("input", () => {
@@ -9,11 +12,14 @@ window.addEventListener('load', () => {
 
       // 販売手数料を計算
       const tax = Math.floor(inputValue * 0.1);
-      addTaxDom.innerHTML = tax;
+      addTaxDom.innerHTML = formatNumber(tax);
 
       // 販売利益を計算
       const profit = inputValue - tax;
-      profitDom.innerHTML = profit;
+      profitDom.innerHTML = formatNumber(profit);
     });
   }
-});
+}
+
+document.addEventListener('turbo:load', setupPriceCalculation);
+document.addEventListener('DOMContentLoaded', setupPriceCalculation);
