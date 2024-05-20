@@ -11,7 +11,6 @@ class Item < ApplicationRecord
   belongs_to :shipping_date
 
   with_options presence: true do
-    validates :user
     validates :name
     validates :description
     validates :price
