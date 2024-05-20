@@ -11,11 +11,11 @@ function setupPriceCalculation() {
       const profitDom = document.getElementById("profit");
 
       // 販売手数料を計算
-      const tax = Math.floor(inputValue * 0.1);
+      const tax = Math.floor(inputValue * 0.1); 
       addTaxDom.innerHTML = formatNumber(tax);
 
       // 販売利益を計算
-      const profit = inputValue - tax;
+      const profit = Math.floor(inputValue - tax);
       profitDom.innerHTML = formatNumber(profit);
     });
   }
