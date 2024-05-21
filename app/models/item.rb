@@ -1,8 +1,14 @@
 class Item < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to :user
-  #has_one :order
+  has_one :order, class_name: 'Order', foreign_key: 'item_id'
   has_one_attached :image
+
+  validates :content, presence: true, unless: :was_attached?
+
+  def was_attached?
+    self.image.attached?
+  end
 
   belongs_to :category
   belongs_to :item_status
@@ -17,7 +23,7 @@ class Item < ApplicationRecord
     validates :image
   end
 
-  with_options numericality: { other_than: 1, message: "must be other than 1" } do
+  with_options numericality: { other_than: 1, message: 'must be other than 1' } do
     validates :category_id
     validates :prefecture_id
     validates :item_status_id
@@ -27,6 +33,3 @@ class Item < ApplicationRecord
 
   validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999 }
 end
-
-
-
