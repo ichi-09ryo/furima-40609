@@ -1,16 +1,28 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :check_item_owner, only: [:edit, :update]
 
   def index
     @items = Item.includes(:user).order(created_at: :desc)
   end
 
   def show
-    @item = Item.find(params[:id])
   end
 
   def new
     @item = Item.new
+  end
+
+  def edit
+  end
+
+  def update
+    if @item.update(item_params)
+      redirect_to @item, notice: 'Item was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def create
@@ -25,8 +37,19 @@ class ItemsController < ApplicationController
 
   private
 
+  def set_item
+    @item = Item.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: 'Item not found.'
+  end
+
+  def check_item_owner
+    unless current_user.id == @item.user_id
+      redirect_to root_path, alert: 'You are not authorized to edit this item.'
+    end
+  end
+
   def item_params
-    params.require(:item).permit(:name, :description, :price, :category_id, :item_status_id, :shipping_cost_id, :prefecture_id,
-                                 :shipping_date_id, :image)
+    params.require(:item).permit(:name, :description, :price, :category_id, :item_status_id, :shipping_cost_id, :prefecture_id, :shipping_date_id, :image)
   end
 end
