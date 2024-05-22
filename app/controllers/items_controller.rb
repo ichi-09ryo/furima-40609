@@ -25,6 +25,16 @@ class ItemsController < ApplicationController
     end
   end
 
+  def destroy
+    @item = Item.find(params[:id])
+    if user_signed_in? && current_user.id == @item.user_id
+      @item.destroy
+      redirect_to root_path, notice: 'Item was successfully deleted.'
+    else
+      redirect_to root_path, alert: 'You are not authorized to delete this item.'
+    end
+  end
+
   def create
     @item = Item.new(item_params)
     @item.user = current_user
