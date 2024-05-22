@@ -1,13 +1,13 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :check_item_owner, only: [:edit, :update]
 
   def index
     @items = Item.includes(:user).order(created_at: :desc)
   end
 
   def show
-    # @item is set by before_action :set_item
   end
 
   def new
@@ -15,7 +15,6 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    # @item is set by before_action :set_item
   end
 
   def update
@@ -23,7 +22,7 @@ class ItemsController < ApplicationController
       redirect_to @item, notice: 'Item was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
-    end  
+    end
   end
 
   def create
@@ -40,6 +39,14 @@ class ItemsController < ApplicationController
 
   def set_item
     @item = Item.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: 'Item not found.'
+  end
+
+  def check_item_owner
+    unless current_user.id == @item.user_id
+      redirect_to root_path, alert: 'You are not authorized to edit this item.'
+    end
   end
 
   def item_params
