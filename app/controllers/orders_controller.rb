@@ -1,14 +1,17 @@
+# app/controllers/orders_controller.rb
 class OrdersController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_item, only: [:index, :create]
+
   def index
-    @oreder = Order.find(params[:order_id])
-    @orders = @item.orders
+    @item_order = ItemOrder.new
   end
 
   def create
-    @item = Item.find(params[:item_id])
-    @order = @item.orders.build(order_params)
-    if @order.save
-      redirect_to item_orders_path(@item)
+    @item_order = ItemOrder.new(order_params)
+    if @item_order.valid?
+      @item_order.save
+      redirect_to root_path, notice: '購入が完了しました。'
     else
       render :index
     end
@@ -16,7 +19,11 @@ class OrdersController < ApplicationController
 
   private
 
+  def set_item
+    @item = Item.find(params[:item_id])
+  end
+
   def order_params
-    params.require(:order).permit(:user_id, :item_id)
+    params.require(:item_order).permit(:amount, :postal_code, :prefecture, :city, :address, :building, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
   end
 end
