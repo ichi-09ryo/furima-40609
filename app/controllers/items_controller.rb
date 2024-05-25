@@ -2,6 +2,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :check_item_owner, only: [:edit, :update]
+  before_action :check_item_sold, only: [:edit, :update]
 
   def index
     @items = Item.includes(:user).order(created_at: :desc)
@@ -17,6 +18,7 @@ class ItemsController < ApplicationController
   end
 
   def edit
+    @item
   end
 
   def update
@@ -57,6 +59,12 @@ class ItemsController < ApplicationController
   def check_item_owner
     unless current_user.id == @item.user_id
       redirect_to root_path, alert: 'You are not authorized to edit this item.'
+    end
+  end
+
+  def check_item_sold
+    if @item.purchased?
+      redirect_to root_path, alert: 'This item has already been sold.'
     end
   end
 

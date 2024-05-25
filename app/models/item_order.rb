@@ -12,8 +12,7 @@ class ItemOrder
 
   def save
     order = Order.create(user_id: user_id, item_id: item_id)
-    Payment.create(order_id: order.id)
-    ShippingAddress.create(
+    Payment.create(
       postcode: postcode,
       prefecture_id: prefecture_id,
       city: city,

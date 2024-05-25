@@ -24,7 +24,7 @@
         <%= @item.shipping_cost.name %>
       </span>
     </div>
-
+  <% unless @item.purchased?%>
    <% if user_signed_in? && current_user.id == @item.user_id %>
     <%= link_to "商品の編集", edit_item_path(@item.id), method: :get, class: "item-red-btn" %>
      <p class='or-text'>or</p>
@@ -32,6 +32,7 @@
    <% elsif user_signed_in? && current_user.id != @item.user_id %>
     <%= link_to "購入画面に進む", item_orders_path(@item), data: { turbo: false }, class: "item-red-btn" %>
    <% end %>  
+  <% end %>
    
     <div class="item-explain-box">
       <span><%= @item.description %></span>
