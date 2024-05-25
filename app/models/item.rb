@@ -26,4 +26,11 @@ class Item < ApplicationRecord
   end
 
   validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999 }
+
+  # 購入済みかどうかを確認するメソッド
+  def purchased?
+    order.present?
+  end
+
 end
+

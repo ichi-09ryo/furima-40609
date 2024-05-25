@@ -1,6 +1,7 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item, only: [:index, :create]
+  before_action :set_gon_payjp_key, only: [:index, :create]
 
   def index
     if user_signed_in? && current_user.id != @item.user_id && @item.order.nil?
@@ -17,7 +18,6 @@ class OrdersController < ApplicationController
       @item_order.save
       redirect_to root_path
     else
-      gon.payjp_public_key = ENV["PAYJP_PUBLIC_KEY"]  # 公開鍵をgonで渡す
       render :index, status: :unprocessable_entity
     end
   end
@@ -28,8 +28,12 @@ class OrdersController < ApplicationController
     @item = Item.find(params[:item_id])
   end
 
+  def set_gon_payjp_key
+    gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
+  end
+
   def order_params
-    params.require(:item_order).permit(:number, :exp_month, :exp_year, :cvc, :postal_code, :prefecture_id, :city, :block, :building, :phone_number).merge(token: params[:item_order][:token], item_id: params[:item_id], user_id: current_user.id)
+    params.require(:item_order).permit( :postcode, :prefecture_id, :city, :block, :building, :phone_number).merge(token: params[:token], item_id: params[:item_id], user_id: current_user.id)
   end
 
   def pay_item
