@@ -2,11 +2,9 @@ require 'rails_helper'
 
 RSpec.describe ItemOrder, type: :model do
   before do
-    @user = FactoryBot.create(:user)
+    @item = FactoryBot.create(:item)
     sleep 0.1  # 少し待機することでタイミングの問題を回避
-    @item = FactoryBot.create(:item, user: @user)
-    sleep 0.1  # 少し待機することでタイミングの問題を回避
-    @item_order = FactoryBot.build(:item_order, user_id: @user.id, item_id: @item.id)
+    @item_order = FactoryBot.build(:item_order, user_id: @item.user.id, item_id: @item.id)
     sleep 0.1  # 少し待機することでタイミングの問題を回避
   end
 
