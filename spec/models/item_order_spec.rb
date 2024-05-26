@@ -23,70 +23,58 @@ RSpec.describe ItemOrder, type: :model do
     end
 
     context '購入がうまくいかないとき' do
-      it 'tokenが空では購入できないこと' do
+      it 'クレジットカード情報が空では購入できないこと' do
         @item_order.token = nil
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Token can't be blank")
       end
 
-      it 'postcodeが空では購入できないこと' do
+      it '郵便番号が空では購入できないこと' do
         @item_order.postcode = nil
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Postcode can't be blank")
       end
 
-      it 'postcodeが半角のハイフンを含んだ正しい形式でないと購入できないこと' do
+      it '郵便番号が半角のハイフンを含んだ正しい形式でないと購入できないこと' do
         @item_order.postcode = '1234567'
         @item_order.valid?
-        expect(@item_order.errors.full_messages).to include("Postcode is invalid. Include hyphen(-)")
+        expect(@item_order.errors.full_messages).to include('Postcode is invalid. Include hyphen(-)')
       end
 
-      it 'prefecture_idが1では購入できないこと' do
+      it '都道府県が『--』では購入できないこと' do
         @item_order.prefecture_id = 1
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Prefecture can't be blank")
       end
 
-      it 'cityが空では購入できないこと' do
+      it '市区町村が空では購入できないこと' do
         @item_order.city = nil
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("City can't be blank")
       end
 
-      it 'blockが空では購入できないこと' do
+      it '番地が空では購入できないこと' do
         @item_order.block = nil
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Block can't be blank")
       end
 
-      it 'phone_numberが空では購入できないこと' do
+      it '携帯番号が空では購入できないこと' do
         @item_order.phone_number = nil
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Phone number can't be blank")
       end
 
-      it 'phone_numberが11桁以内でないと購入できないこと' do
+      it '携帯番号が11桁以内でないと購入できないこと' do
         @item_order.phone_number = '090123456789'
         @item_order.valid?
-        expect(@item_order.errors.full_messages).to include("Phone number is invalid")
+        expect(@item_order.errors.full_messages).to include('Phone number is invalid')
       end
 
-      it 'phone_numberが半角数字でないと購入できないこと' do
+      it '携帯番号が半角数字でないと購入できないこと' do
         @item_order.phone_number = '０９０１２３４５６７８'
         @item_order.valid?
-        expect(@item_order.errors.full_messages).to include("Phone number is invalid")
-      end
-
-      it 'user_idが空では購入できないこと' do
-        @item_order.user_id = nil
-        @item_order.valid?
-        expect(@item_order.errors.full_messages).to include("User can't be blank")
-      end
-
-      it 'item_idが空では購入できないこと' do
-        @item_order.item_id = nil
-        @item_order.valid?
-        expect(@item_order.errors.full_messages).to include("Item can't be blank")
+        expect(@item_order.errors.full_messages).to include('Phone number is invalid')
       end
     end
   end

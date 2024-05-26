@@ -31,6 +31,4 @@ class Item < ApplicationRecord
   def purchased?
     order.present?
   end
-
 end
-
