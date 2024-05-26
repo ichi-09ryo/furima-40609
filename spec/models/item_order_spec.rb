@@ -80,6 +80,18 @@ RSpec.describe ItemOrder, type: :model do
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include('Phone number is invalid')
       end
+
+      it 'userが紐づいていない場合購入できないこと' do
+        @item_order.user_id = nil
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("User can't be blank")
+      end
+
+      it 'itemが紐づいていない場合購入できないこと' do
+        @item_order.item_id = nil
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("Item can't be blank")
+      end
     end
   end
 end
