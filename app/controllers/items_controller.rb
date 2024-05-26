@@ -9,7 +9,6 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
     @can_purchase = current_user != @item.user
   end
 
