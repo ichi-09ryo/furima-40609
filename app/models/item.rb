@@ -4,12 +4,6 @@ class Item < ApplicationRecord
   has_one :order, class_name: 'Order', foreign_key: 'item_id'
   has_one_attached :image
 
-  validates :content, presence: true, unless: :was_attached?
-
-  def was_attached?
-    image.attached?
-  end
-
   belongs_to :category
   belongs_to :item_status
   belongs_to :shipping_cost
@@ -32,4 +26,9 @@ class Item < ApplicationRecord
   end
 
   validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999 }
+
+  # 購入済みかどうかを確認するメソッド
+  def purchased?
+    order.present?
+  end
 end

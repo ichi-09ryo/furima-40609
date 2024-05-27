@@ -2,12 +2,14 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :check_item_owner, only: [:edit, :update]
+  before_action :check_item_sold, only: [:edit, :update]
 
   def index
     @items = Item.includes(:user).order(created_at: :desc)
   end
 
   def show
+    @can_purchase = current_user != @item.user
   end
 
   def new
@@ -53,12 +55,19 @@ class ItemsController < ApplicationController
   end
 
   def check_item_owner
-    unless current_user.id == @item.user_id
-      redirect_to root_path, alert: 'You are not authorized to edit this item.'
-    end
+    return if current_user.id == @item.user_id
+
+    redirect_to root_path, alert: 'You are not authorized to edit this item.'
+  end
+
+  def check_item_sold
+    return unless @item.purchased?
+
+    redirect_to root_path, alert: 'This item has already been sold.'
   end
 
   def item_params
-    params.require(:item).permit(:name, :description, :price, :category_id, :item_status_id, :shipping_cost_id, :prefecture_id, :shipping_date_id, :image)
+    params.require(:item).permit(:name, :description, :price, :category_id, :item_status_id, :shipping_cost_id, :prefecture_id,
+                                 :shipping_date_id, :image)
   end
 end
