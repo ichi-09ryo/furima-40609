@@ -22,4 +22,3 @@ function setupPriceCalculation() {
 }
 
 document.addEventListener('turbo:load', setupPriceCalculation);
-document.addEventListener('DOMContentLoaded', setupPriceCalculation);
