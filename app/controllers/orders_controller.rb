@@ -29,7 +29,7 @@ class OrdersController < ApplicationController
   end
 
   def set_gon_payjp_key
-    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
+    gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
   end
 
   def order_params
@@ -39,7 +39,7 @@ class OrdersController < ApplicationController
   end
 
   def pay_item
-    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
+    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
     Payjp::Charge.create(
       amount: @item.price,
       card: order_params[:token],
